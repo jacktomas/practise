@@ -32,7 +32,6 @@ public class HelloExample {
 
     private void test(int i){
         if(0==i){
-
             System.out.println("your logic");
             logger.warn("这是不对的参数,值为:"+i);
         }

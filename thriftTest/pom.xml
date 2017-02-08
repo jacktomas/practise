@@ -22,6 +22,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.facebook.nifty</groupId>
+            <artifactId>nifty-core</artifactId>
+            <version>0.23.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.thrift</groupId>
             <artifactId>libthrift</artifactId>
             <version>0.9.1</version>

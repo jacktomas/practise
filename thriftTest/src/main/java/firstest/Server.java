@@ -9,7 +9,7 @@ import org.apache.thrift.transport.TTransportException;
  * Created by root on 17-2-7.
  */
 public class Server {
-    private void start() {
+    void start() {
         try {
             // Set port
             TServerSocket serverTransport = new TServerSocket(7911);

@@ -14,7 +14,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  */
 public class TimeClient {
     public void connect(int port, String host) {
-
+        //configure nio thread
         EventLoopGroup group = new NioEventLoopGroup();
 
         try {
@@ -27,8 +27,13 @@ public class TimeClient {
                             socketChannel.pipeline().addLast(new TimeClientHandler());
                         }
                     });
+
+            //begin asyn connect
             ChannelFuture f = b.connect(host, port).sync();
+
+            //wait client to close
             f.channel().closeFuture().sync();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
@@ -44,8 +49,7 @@ public class TimeClient {
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-            new TimeClient().connect(port, "127.0.0.1");
-
         }
+        new TimeClient().connect(port, "127.0.0.1");
     }
 }

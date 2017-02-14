@@ -1,4 +1,4 @@
-package basic.tcpexception.delimiterbasedframedecoder;
+package basic.delimiterbasedframedecoder;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;

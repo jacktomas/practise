@@ -1,4 +1,4 @@
-package basic.tcpexception.delimiterbasedframedecoder;
+package basic.delimiterbasedframedecoder;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;

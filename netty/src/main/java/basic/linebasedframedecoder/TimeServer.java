@@ -1,8 +1,6 @@
-package basic.tcpexception.delimiterbasedframedecoder;
+package basic.linebasedframedecoder;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -10,13 +8,13 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 
 /**
- * Created by root on 17-2-14.
+ * Created by root on 17-2-13.
  */
-public class EchoServer {
+public class TimeServer {
     public static void main(String[] args) {
         int port = 8080;
         if (args != null && args.length > 0) {
@@ -27,7 +25,7 @@ public class EchoServer {
             }
 
         }
-        new EchoServer().bind(port);
+        new TimeServer().bind(port);
     }
 
     private void bind(int port) {
@@ -60,11 +58,9 @@ public class EchoServer {
     private class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
         @Override
         protected void initChannel(SocketChannel socketChannel) throws Exception {
-            ByteBuf delimiter = Unpooled.copiedBuffer("$_".getBytes());
-
-            socketChannel.pipeline().addLast(new DelimiterBasedFrameDecoder(1024, delimiter));
+            socketChannel.pipeline().addLast(new LineBasedFrameDecoder(1024));
             socketChannel.pipeline().addLast(new StringDecoder());
-            socketChannel.pipeline().addLast(new EchoServerHandler());
+            socketChannel.pipeline().addLast(new TimeServerHandler());
 
 
         }

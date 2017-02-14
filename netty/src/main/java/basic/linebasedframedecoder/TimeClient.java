@@ -1,4 +1,4 @@
-package basic.tcpexception.linebasedframedecoder;
+package basic.linebasedframedecoder;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;

@@ -24,7 +24,6 @@ public class SubReqServer {
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-
         }
         new SubReqServer().bind(port);
     }
@@ -44,8 +43,13 @@ public class SubReqServer {
                             socketChannel.pipeline().
                                     addLast(new ObjectDecoder(
                                             1024 * 1024,
-                                            ClassResolvers.weakCachingConcurrentResolver(this.getClass().getClassLoader())));
+                                            ClassResolvers.
+                                                    weakCachingConcurrentResolver(this
+                                                            .getClass()
+                                                            .getClassLoader())));
+
                             socketChannel.pipeline().addLast(new ObjectEncoder());
+
                             socketChannel.pipeline().addLast(new SubReqServerHandler());
 
                         }

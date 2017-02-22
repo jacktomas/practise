@@ -68,7 +68,9 @@
 
             2：在 target/classes 目录下执行
              java -cp bin:/home/jibx/lib/jibx-tools.jar org.jibx.binding.generator.BindGen -b binding.xml -s protocol.httpxml.pojo.Order
-                -b 指定xml名字
+                /home/jibx/lib/   是下载的jibx1.3.1.zip 解压之后的文件目录,里面有许多jar，运行 jibx-tool.jar 时需要依赖其他包
+                    /home/jibx/lib/jibx-tools.jar 有org.jibx.binding.generator.BindGen 类生成 bind.xml
+               参数 ： -b 指定xml名字
             3： mvn jibx:bind
                 这一步报了一个错误：
                     No plugin found for prefix 'jibx' in the current project and in the plugin groups

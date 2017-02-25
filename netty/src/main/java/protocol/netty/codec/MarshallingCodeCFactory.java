@@ -11,6 +11,7 @@ public class MarshallingCodeCFactory {
     public static Marshaller buildMarshalling() throws IOException {
         final MarshallerFactory factory = Marshalling.getProvidedMarshallerFactory("serial");
         MarshallingConfiguration configuration = new MarshallingConfiguration();
+        configuration.setVersion(5);
         Marshaller marshaller = factory.createMarshaller(configuration);
         return marshaller;
 
@@ -19,6 +20,7 @@ public class MarshallingCodeCFactory {
     public static Unmarshaller buildUnMarshalling() throws IOException {
         final MarshallerFactory factory = Marshalling.getProvidedMarshallerFactory("serial");
         MarshallingConfiguration configuration = new MarshallingConfiguration();
+        configuration.setVersion(5);
         Unmarshaller unmarshaller = factory.createUnmarshaller(configuration);
         return unmarshaller;
     }

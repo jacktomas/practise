@@ -6,6 +6,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import protocol.netty.nettymessage.Header;
 import protocol.netty.nettymessage.NettyMessage;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,9 +16,9 @@ import java.util.Map;
 public class NettyMessageDecoder extends LengthFieldBasedFrameDecoder {
     MarshallingDecoder marshallingDecoder;
 
-    public NettyMessageDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength, MarshallingDecoder marshallingDecoder) {
+    public NettyMessageDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength) throws IOException {
         super(maxFrameLength, lengthFieldOffset, lengthFieldLength);
-        this.marshallingDecoder = marshallingDecoder;
+        this.marshallingDecoder = new MarshallingDecoder();
     }
 
     @Override
@@ -37,7 +38,7 @@ public class NettyMessageDecoder extends LengthFieldBasedFrameDecoder {
         int size = in.readInt();
 
         if (size > 0) {
-            Map<String, Object> attch = new HashMap<>(size);
+            Map<String, Object> attch = new HashMap<String, Object>(size);
             int keySize = 0;
             byte[] keyArray = null;
             String key = null;

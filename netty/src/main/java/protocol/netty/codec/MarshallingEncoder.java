@@ -12,7 +12,7 @@ public class MarshallingEncoder {
     private static final byte[] LENGTH_PLACEHOLDER = new byte[4];
     Marshaller marshall;
 
-    public MarshallingEncoder(Marshaller marshall) throws IOException {
+    public MarshallingEncoder() throws IOException {
         this.marshall = MarshallingCodeCFactory.buildMarshalling();
     }
 

@@ -1,6 +1,7 @@
 package protocol.netty.codec;
 
 import io.netty.buffer.ByteBuf;
+import org.jboss.marshalling.ByteInput;
 import org.jboss.marshalling.Unmarshaller;
 
 import java.io.IOException;
@@ -12,14 +13,14 @@ public class MarshallingDecoder {
     private final Unmarshaller unmarshaller;
 
 
-    public MarshallingDecoder(Unmarshaller unmarshaller) throws IOException {
+    public MarshallingDecoder() throws IOException {
         this.unmarshaller = MarshallingCodeCFactory.buildUnMarshalling();
     }
 
     protected Object decode(ByteBuf in) throws IOException, ClassNotFoundException {
         int objectSize = in.readInt();
         ByteBuf buf = in.slice(in.readerIndex(), objectSize);
-        ChannelBufferByteInput input = new ChannelBufferByteInput(buf);
+        ByteInput input = new ChannelBufferByteInput(buf);
         try {
             unmarshaller.start(input);
             Object obj = unmarshaller.readObject();

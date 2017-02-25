@@ -1,30 +1,30 @@
 package protocol.netty.codec;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToMessageEncoder;
+import io.netty.handler.codec.MessageToByteEncoder;
 import protocol.netty.nettymessage.NettyMessage;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**
  * Created by root on 17-2-23.
  */
-public class NettyMessageEncoder extends MessageToMessageEncoder<NettyMessage> {
+//Note:this extends class MessageToByteEncoder,but the book is MessagetoMessageEncoder
+public class NettyMessageEncoder extends MessageToByteEncoder<NettyMessage> {
     MarshallingEncoder marshallingEncoder;
 
     public NettyMessageEncoder() throws IOException {
         this.marshallingEncoder = new MarshallingEncoder();
     }
 
-    @Override
-    protected void encode(ChannelHandlerContext ctx, NettyMessage msg, List<Object> out) throws Exception {
+
+    protected void encode(ChannelHandlerContext ctx, NettyMessage msg, ByteBuf sendBuf) throws Exception {
         if (msg == null && msg.getHeader() == null)
             throw new Exception("The encode message is null ");
-        ByteBuf sendBuf = Unpooled.buffer();
+
+        //ByteBuf sendBuf = Unpooled.buffer();       this from netty book
         sendBuf.writeInt(msg.getHeader().getCrcCode());
         sendBuf.writeInt(msg.getHeader().getLength());
         sendBuf.writeLong(msg.getHeader().getSessionID());
@@ -50,7 +50,7 @@ public class NettyMessageEncoder extends MessageToMessageEncoder<NettyMessage> {
             marshallingEncoder.encode(msg.getObject(), sendBuf);
         } else
             sendBuf.writeInt(0);
-        sendBuf.setInt(4, sendBuf.readableBytes());
+        sendBuf.setInt(4, sendBuf.readableBytes() - 8);
 
     }
 }

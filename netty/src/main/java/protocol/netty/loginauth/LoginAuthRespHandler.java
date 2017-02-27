@@ -40,7 +40,7 @@ public class LoginAuthRespHandler extends ChannelHandlerAdapter {
                 if (isOK)
                     nodeCheck.put(nodeIndex, true);
             }
-            System.out.println("The login response is :" + loginResp + "body [" + loginResp.getObject() + "]");
+            System.out.println("The login response is :" + loginResp + "  body [" + loginResp.getObject() + "]");
             ctx.writeAndFlush(loginResp);
         } else {
             ctx.fireChannelRead(msg);

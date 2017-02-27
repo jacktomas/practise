@@ -10,7 +10,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import protocol.netty.codec.NettyMessageDecoder;
 import protocol.netty.codec.NettyMessageEncoder;
-import protocol.netty.heartbeat.HeartBeatReqHandler;
+import protocol.netty.heartbeat.HeartBeatRespHandler;
 import protocol.netty.loginauth.LoginAuthRespHandler;
 import protocol.netty.nettymessage.NettyConstant;
 
@@ -39,7 +39,7 @@ public class NettyServer {
 
                             socketChannel.pipeline().addLast("readTimeoutHandler", new ReadTimeoutHandler(50));
                             socketChannel.pipeline().addLast("LoginAuthHandler", new LoginAuthRespHandler());
-                            socketChannel.pipeline().addLast("HeartbeatHandler", new HeartBeatReqHandler());
+                            socketChannel.pipeline().addLast("HeartbeatHandler", new HeartBeatRespHandler());
                         }
                     });
             ChannelFuture future = b.bind(NettyConstant.REMOTEIP, NettyConstant.PORT).sync();

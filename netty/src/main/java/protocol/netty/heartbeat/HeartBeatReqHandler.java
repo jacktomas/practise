@@ -22,11 +22,17 @@ public class HeartBeatReqHandler extends ChannelHandlerAdapter {
 
         if (message.getHeader() != null
                 && message.getHeader().getType() == MessageType.LOGIN_RESP.value()) {
-            heartBeat = ctx.executor().scheduleAtFixedRate(new HeartBeatReqHandler.HeartBeatTask(ctx), 0, 5000, TimeUnit.MILLISECONDS);
 
-        } else if (message.getHeader() != null && message.getHeader().getType() == MessageType.HEARTBEAT_RESP.value()) {
+            heartBeat = ctx.executor().scheduleAtFixedRate(
+                    new HeartBeatReqHandler.HeartBeatTask(ctx), 0, 5000, TimeUnit.MILLISECONDS);
+
+        } else if (message.getHeader() != null &&
+                message.getHeader().getType() == MessageType.HEARTBEAT_RESP.value()) {
+
             System.out.println("Client receive server heart beat message:--->" + message);
+
         } else
+
             ctx.fireChannelRead(msg);
     }
 

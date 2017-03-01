@@ -17,7 +17,9 @@ public class RPCMain {
                 }
             }
         }).start();
+        //The client neither knows nor cares about the implementation, only the interface
         RpcImporter<EchoService> importer = new RpcImporter<EchoService>();
+        //EchoService is interface
         EchoService echo = importer.importer(EchoServiceImp.class, new InetSocketAddress("localhost", 8088));
         System.out.println(echo.echo("hi ,are you ok"));
 

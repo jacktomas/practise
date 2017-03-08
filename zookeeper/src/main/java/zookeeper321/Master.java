@@ -42,6 +42,6 @@ public class Master implements Watcher {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        master.startZK();
+        master.stopZK();
     }
 }

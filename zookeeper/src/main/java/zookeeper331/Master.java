@@ -71,6 +71,13 @@ public class Master implements Watcher {
         master.startZK();
 
         master.runForMaster();
+        try {
+            System.out.println(master.zk.getChildren("/brokers", master));
+        } catch (KeeperException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         try {
             Thread.sleep(10000);

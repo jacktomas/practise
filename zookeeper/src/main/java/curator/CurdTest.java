@@ -5,6 +5,10 @@ import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.api.BackgroundCallback;
 import org.apache.curator.framework.api.CuratorEvent;
 import org.apache.curator.framework.api.CuratorListener;
+import org.apache.curator.framework.recipes.cache.ChildData;
+import org.apache.curator.framework.recipes.cache.PathChildrenCache;
+import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
+import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.Watcher;
@@ -114,7 +118,31 @@ public class CurdTest {
             }
 
         };
-        client.getCuratorListenable().addListener(listener2);
+
+        PathChildrenCache childrenCache = new PathChildrenCache(client, "/curatortest", true);
+        PathChildrenCacheListener childrenCacheListener = new PathChildrenCacheListener() {
+            @Override
+            public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
+                System.out.println("开始进行事件分析:-----");
+                ChildData data = event.getData();
+                switch (event.getType()) {
+                    case CHILD_ADDED:
+                        System.out.println("CHILD_ADDED : "+ data.getPath() +"  数据:"+ data.getData());
+                        break;
+                    case CHILD_REMOVED:
+                        System.out.println("CHILD_REMOVED : "+ data.getPath() +"  数据:"+ data.getData());
+                        break;
+                    case CHILD_UPDATED:
+                        System.out.println("CHILD_UPDATED : "+ data.getPath() +"  数据:"+ data.getData());
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+        //client.getCuratorListenable().addListener(listener2);
+        childrenCache.getListenable().addListener(childrenCacheListener);
+        childrenCache.start(PathChildrenCache.StartMode.POST_INITIALIZED_EVENT);
         return client.getChildren().watched().forPath(path);
     }
 
@@ -122,6 +150,9 @@ public class CurdTest {
         //Watcher watcher1=()->{};
         return client.getChildren().usingWatcher(watcher).forPath(path);
     }
+
+
+
 
     public static void main(String[] args) throws Exception {
 

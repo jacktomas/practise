@@ -56,18 +56,12 @@ public class DistributedLock {
                 }
             }
         };
-        lock = createLock(client);
-        lock.makeRevocable(revocationListener);
-        client.getConnectionStateListenable().addListener(stateListener);
-    }
-
-    private InterProcessMutex createLock(CuratorFramework client) {
         lock = new InterProcessMutex(client, lockPath);
         //协同中断,如果其他线程/进程需要此锁中断时,调用此listener.
         lock.makeRevocable(revocationListener);
         client.getConnectionStateListenable().addListener(stateListener);
-        return lock;
     }
+
 
     public boolean lock() {
         try {

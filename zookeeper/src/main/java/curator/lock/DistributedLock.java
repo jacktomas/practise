@@ -155,8 +155,9 @@ public class DistributedLock {
         };
         DistributedLock distLock = new DistributedLock(client, "/lock", le);
         distLock.lock();
+        Thread.sleep(20000);
         distLock.unlock();
-        Thread.sleep(2000);
+        Thread.sleep(2100);
         client.close();
     }
 

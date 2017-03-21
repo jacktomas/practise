@@ -1,0 +1,3 @@
+xxx=aop.ProxyFactoryBean
+xxx.advice=aop.MyAdvice
+xxx.target=java.util.ArrayList

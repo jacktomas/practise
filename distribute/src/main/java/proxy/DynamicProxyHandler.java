@@ -13,7 +13,7 @@ public class DynamicProxyHandler implements InvocationHandler {
         this.testProxy = proxy;
     }
 
-    @Override
+
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         System.out.println("this is proxy : " + proxy.getClass() + ",method : " + method + " ,args: " + args);
         if (args != null) {

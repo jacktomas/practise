@@ -1,6 +1,7 @@
 package com.test.server;
 
 import com.test.client.RpcRequest;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.springframework.cglib.reflect.FastClass;
@@ -19,8 +20,16 @@ public class RpcHandler extends SimpleChannelInboundHandler<RpcRequest> {
         this.handlerMap = handlerMap;
     }
     @Override
-    protected void messageReceived(ChannelHandlerContext channelHandlerContext, RpcRequest rpcRequest) throws Exception {
-
+    protected void messageReceived(ChannelHandlerContext ctx, RpcRequest request) throws Exception {
+        RpcResponse response = new RpcResponse();
+        response.setRequestId(request.getRequestId());
+        try {
+            Object result = handle(request);
+            response.setResult(result);
+        } catch (Throwable t) {
+            response.setError(t);
+        }
+        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
 
     private Object handle(RpcRequest request) throws Throwable {

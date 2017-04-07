@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Administrator on 2017/4/6.
  */
-public class RpcClient extends SimpleChannelInboundHandler<RpcResponse> {
+public class RpcClient extends ChannelHandlerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(RpcClient.class);
 
     private String host;
@@ -29,14 +29,15 @@ public class RpcClient extends SimpleChannelInboundHandler<RpcResponse> {
     }
 
     @Override
-    protected void messageReceived(ChannelHandlerContext ctx, RpcResponse msg) throws Exception {
-        this.response = msg;
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        this.response = (RpcResponse) msg;
 
         synchronized (obj) {
             obj.notifyAll(); // 收到响应，唤醒线程
         }
 
     }
+
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
@@ -53,8 +54,8 @@ public class RpcClient extends SimpleChannelInboundHandler<RpcResponse> {
                         @Override
                         public void initChannel(SocketChannel channel) throws Exception {
                             channel.pipeline()
-                                    .addLast(new RpcEncoder(RpcRequest.class)) // 将 RPC 请求进行编码（为了发送请求）
                                     .addLast(new RpcDecoder(RpcResponse.class)) // 将 RPC 响应进行解码（为了处理响应）
+                                    .addLast(new RpcEncoder(RpcRequest.class)) // 将 RPC 请求进行编码（为了发送请求）
                                     .addLast(RpcClient.this); // 使用 RpcClient 发送 RPC 请求
                         }
                     })

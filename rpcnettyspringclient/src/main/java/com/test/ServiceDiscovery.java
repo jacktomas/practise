@@ -30,6 +30,7 @@ public class ServiceDiscovery {
         this.registryAddress = registryAddress;
 
         ZooKeeper zk = connectServer();
+
         if (zk != null) {
             watchNode(zk);
         }
@@ -53,7 +54,7 @@ public class ServiceDiscovery {
     private ZooKeeper connectServer() {
         ZooKeeper zk = null;
         try {
-            zk = new ZooKeeper(registryAddress, 2000, new Watcher() {
+            zk = new ZooKeeper(registryAddress, 5000, new Watcher() {
                 @Override
                 public void process(WatchedEvent event) {
                     if (event.getState() == Event.KeeperState.SyncConnected) {
@@ -70,7 +71,7 @@ public class ServiceDiscovery {
 
     private void watchNode(final ZooKeeper zk) {
         try {
-            List<String> nodeList = zk.getChildren("", new Watcher() {
+            List<String> nodeList = zk.getChildren("/curatortest", new Watcher() {
                 @Override
                 public void process(WatchedEvent event) {
                     if (event.getType() == Event.EventType.NodeChildrenChanged) {
@@ -81,6 +82,7 @@ public class ServiceDiscovery {
             List<String> dataList = new ArrayList<>();
             for (String node : nodeList) {
                 byte[] bytes = zk.getData("/curatortest" + "/" + node, false, null);
+                System.out.println("-----"+new String(bytes));
                 dataList.add(new String(bytes));
             }
             LOGGER.debug("node data: {}", dataList);

@@ -23,8 +23,8 @@ public class RpcProxy {
     @SuppressWarnings("unchecked")
     public <T> T create(Class<?> interfaceClass) {
         return (T) Proxy.newProxyInstance(
-                interfaceClass.getClassLoader(),
-                new Class<?>[]{interfaceClass},
+                HelloService.class.getClassLoader(),
+                new Class<?>[]{HelloService.class},
                 new InvocationHandler() {
                     @Override
                     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {

@@ -63,7 +63,7 @@ public class RpcClient extends ChannelHandlerAdapter {
 
             ChannelFuture future = bootstrap.connect(host, port).sync();
             future.channel().writeAndFlush(request).sync();
-
+            System.out.println("the message is already sended");
             synchronized (obj) {
                 obj.wait(); // 未收到响应，使线程等待
             }

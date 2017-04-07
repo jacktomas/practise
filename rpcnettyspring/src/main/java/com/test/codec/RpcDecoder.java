@@ -40,6 +40,7 @@ public class RpcDecoder extends ByteToMessageCodec {
         in.readBytes(data);
 
         Object obj = SerializationUtil.deserialize(data, genericClass);
+        System.out.println("this is data decode from request: ");
         out.add(obj);
     }
 

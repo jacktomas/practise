@@ -5,7 +5,8 @@ import com.dyuproject.protostuff.ProtostuffIOUtil;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 import org.objenesis.Objenesis;
-import org.springframework.objenesis.ObjenesisStd;
+import org.objenesis.ObjenesisStd;
+
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

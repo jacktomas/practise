@@ -10,6 +10,8 @@ import java.util.Arrays;
  * 2：从切出来的字符串判断是否有词语存在字典里，有的话 i=i+词语长度 调回第一步，没有的话截取第一位到倒数第二位的字符串
  * 3：截取出来的字符串做第二步的判断
  */
+/*
+* 基于统计概率模型的分词算法比如 maxent  或  CRF++ 等*/
 
 public class SentenceProcess {
     ArrayList<String> words = new ArrayList();

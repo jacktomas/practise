@@ -23,7 +23,7 @@ public class NettyServerHandler extends ChannelHandlerAdapter {
         } catch (Throwable t) {
             response.setError(t);
         }
-        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+        ctx.writeAndFlush(response);
     }
 
     private Object handle(RpcRequest request) throws Throwable {

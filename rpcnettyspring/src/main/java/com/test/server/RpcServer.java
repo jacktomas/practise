@@ -40,6 +40,10 @@ public class RpcServer implements ApplicationContextAware,InitializingBean {
         this.serviceRegistry = serviceRegistry;
     }
 
+    /*当一个类实现了这个接口（ApplicationContextAware）之后，这个类就可以方便获得ApplicationContext中的所有bean。
+     *换句话说，就是这个类可以直接获取spring配置文件中，所有有引用到的bean对象，还有其他用处
+    *在正常的bean之后调用，但是在InitializingBean#afterPropertiesSet()之前调用
+    * */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         Map<String, Object> serviceBeanMap = applicationContext.getBeansWithAnnotation(RPCService.class); // 获取所有带有 RpcService 注解的 Spring Bean

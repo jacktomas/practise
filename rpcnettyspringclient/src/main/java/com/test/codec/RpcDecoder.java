@@ -4,20 +4,20 @@ import com.test.util.SerializationUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
+import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/4/5.
  */
-public class RpcDecoder extends ByteToMessageCodec {
+public class RpcDecoder extends ByteToMessageDecoder {
     private Class<?> genericClass;
 
     public RpcDecoder(Class<?> genericClass) {
         this.genericClass = genericClass;
     }
 
-    @Override
     protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
 
     }

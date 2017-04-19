@@ -1,0 +1,83 @@
+## 序
+    rpc调用，有多种序列化的方式，通用如json，mongodb使用的bson；java方面的，比如Java默认的序列化，
+    比如hessian；还有跨语言的，比如thrift、protocolbuf。thrift和pb的好处是序列化后size比较小，
+    但是缺点是得生成java代码，这个挺鸡肋的，所以不管二者运行时效率有多高，开发效率相对比较低的。像hessian，
+    是有一些在用，但是感觉不如pb那样强大。所以也一直在寻找运行效率与开发效率兼得的序列化方式。
+    偶尔在网上看到protostuff，觉得找到了一直在找的这种序列化方式。
+------
+## protostuff简介
+    protobuf的一个缺点是需要数据结构的预编译过程，首先要编写.proto格式的配置文件，
+    再通过protobuf提供的工具生成各种语言响应的代码。由于java具有反射和动态代码生成的能力，
+    这个预编译过程不是必须的，可以在代码执行时来实现。有protostuff已经实现了这个功能。
+
+-----
+## pom依赖
+```
+ <dependency>
+            <groupId>com.dyuproject.protostuff</groupId>
+            <artifactId>protostuff-core</artifactId>
+            <version>1.0.12</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dyuproject.protostuff</groupId>
+            <artifactId>protostuff-runtime</artifactId>
+            <version>1.0.12</version>
+        </dependency>
+```
+
+## 工具类
+ *这里导入的包是org.objennsis.ObjenesisStd,不是spring的，注意服务端和客户端包要统一*
+```
+public class SerializationUtil {
+    private static Map<Class<?>, Schema<?>> cachedSchema = new ConcurrentHashMap<>();
+    //这里导入的包是org.objennsis.ObjenesisStd,不是spring的，注意服务端和客户端包要统一
+    private static Objenesis objenesis = (Objenesis) new ObjenesisStd(true);
+
+    private SerializationUtil() {
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> Schema<T> getSchema(Class<T> cls) {
+        Schema<T> schema = (Schema<T>) cachedSchema.get(cls);
+        if (schema == null) {
+            schema = RuntimeSchema.createFrom(cls);
+            if (schema != null) {
+                cachedSchema.put(cls, schema);
+            }
+        }
+        return schema;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> byte[] serialize(T obj) {
+        Class<T> cls = (Class<T>) obj.getClass();
+        LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
+        try {
+            Schema<T> schema = getSchema(cls);
+            return ProtostuffIOUtil.toByteArray(obj, schema, buffer);
+        } catch (Exception e) {
+            throw new IllegalStateException(e.getMessage(), e);
+        } finally {
+            buffer.clear();
+        }
+    }
+
+    public static <T> T deserialize(byte[] data, Class<T> cls) {
+        try {
+            T message = (T) objenesis.newInstance(cls);
+            Schema<T> schema = getSchema(cls);
+            ProtostuffIOUtil.mergeFrom(data, message, schema);
+            return message;
+        } catch (Exception e) {
+            throw new IllegalStateException(e.getMessage(), e);
+        }
+    }
+}
+```
+
+
+
+## netty编解码继承接口
+    1. ByteToMessageDecoder 解码类
+    2. MessageToByteEncoder 编码类
+    
